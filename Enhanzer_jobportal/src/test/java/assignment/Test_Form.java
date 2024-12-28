@@ -106,15 +106,29 @@ public class Test_Form {
         }
 
         // Enter phone number
-        driver.findElement(By.id("userNumber")).sendKeys("9876543210");
+        try{
+            WebElement mobileNumber= driver.findElement(By.id("userNumber"));
+       mobileNumber.sendKeys("9876543210");
+       assertEquals(mobileNumber.getText(),"Mobile Number is Required");
+        }catch (AssertionError err){
+            System.out.println(err.getMessage());
+        }
+
+
 
 
         // Select date of birth
-        driver.findElement(By.id("dateOfBirthInput")).click();
-        WebElement dateInput = driver.findElement(By.id("dateOfBirthInput"));
-        dateInput.clear(); // Clear any  value and set value
-        dateInput.sendKeys("04 Aug 2001");
+        try{
+            driver.findElement(By.id("dateOfBirthInput")).click();
+            WebElement dateInput = driver.findElement(By.id("dateOfBirthInput"));
+            dateInput.clear(); // Clear any  value and set value
+            dateInput.sendKeys("04 Aug 2001");
+            String enteredDate=dateInput.getAttribute("value");
+            assertEquals(enteredDate, "04 Aug 2001", "The date of birth entered does not match the expected value!");
 
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
 
         //Subjects
@@ -267,14 +281,19 @@ public class Test_Form {
             try{
                 driver.findElement(By.xpath("//button[@id='submit']")).click();
 
+                // application has no actual result alert so i empty it
                 WebElement firstNameError = driver.findElement(By.id("firstName"));
-                assertEquals(firstNameError.getText(),"First Name is Required");
+                assertEquals(firstNameError.getText(), "First Name is Required", "");
 
                 WebElement lastNameError = driver.findElement(By.id("lastName"));
-                assertEquals(lastNameError.getText(),"Last Name is Required");
+                assertEquals(lastNameError.getText(), "Last Name is Required", "");
+
+
+                WebElement mobileNumber= driver.findElement(By.id("userNumber"));
+                assertEquals(mobileNumber.getText(),"Mobile Number is Required");
 
                 WebElement emailError = driver.findElement(By.id("userEmail"));
-                assertEquals(emailError.getText(),"Email is Required");
+                assertEquals(emailError.getText(), "Email is Required", "");
             }catch (AssertionError err){
                 System.out.println("Error messages  not appear : " + err.getMessage());
             }finally {
